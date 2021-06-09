@@ -71,7 +71,7 @@ class QuizView extends Component {
         return;
       },
       error: (error) => {
-        alert('Unable to load question. Please try your request again')
+        alert('Unable ---to load question. Please try your request again')
         return;
       }
     })
@@ -106,13 +106,13 @@ class QuizView extends Component {
               <div className="category-holder">
                   <div className="play-category" onClick={this.selectCategory}>ALL</div>
                   {Object.keys(this.state.categories).map(id => {
-                  return (
-                    <div
-                      key={id}
-                      value={id}
-                      className="play-category"
-                      onClick={() => this.selectCategory({type:this.state.categories[id], id})}>
-                      {this.state.categories[id]}
+                    return (
+                      <div
+                        key={id}
+                        value={id}
+                        className="play-category"
+                        onClick={() => this.selectCategory({type:this.state.categories[id], id})}>
+                        {this.state.categories[id]}
                     </div>
                   )
                 })}
