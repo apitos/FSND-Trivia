@@ -267,7 +267,7 @@ The error codes currently returned are:
             }
     ```
 
-#### DELETE /questions/<int:id\>
+#### DELETE /questions/<int:question_id\>
   
 * General:
   * Deletes a question by id using url parameters.
@@ -323,7 +323,7 @@ The error codes currently returned are:
             }
     ```
 
-#### GET /categories/<int:id\>/questions
+#### GET /categories/<int:category_id>/questions
 
 * General:
   * Gets questions by category id using url parameters.
