@@ -115,8 +115,6 @@ def create_app(test_config=None):
         new_category = body.get('category')
         new_difficulty = body.get('difficulty')
 
-        # if not new_question or not new_answer
-        # or not new_category or not new_difficulty:
         if not (new_question or new_answer or new_category or new_difficulty):
             abort(400)
 
@@ -159,11 +157,7 @@ def create_app(test_config=None):
 
             if len(questions) == 0:
                 print("No data to display")
-                # abort(404)
-                return jsonify({
-                    'success': True,
-                    'question': None
-                }), 404
+                abort(404)
 
             return jsonify({
                 'success': True,
@@ -171,9 +165,11 @@ def create_app(test_config=None):
                 'total_questions': len(questions),
                 'current_category': None}), 200
 
-        except Exception as e:
-            print(e)
-            abort(404)
+        except Exception:
+            return jsonify({
+                'success': False,
+                'questions': None
+            }), 404
 
     # --- GET endpoint to get questions based on category.
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
@@ -191,14 +187,9 @@ def create_app(test_config=None):
                 Question.category == category_id).all()
 
             # if available questions in this category
-            if (len(questions) == 0):
-                # abort(404)
+            if len(questions) == 0:
                 print("No question to select")
-                # abort(404)
-                return jsonify({
-                    'success': False,
-                    'question': None
-                }), 404
+                abort(404)
             else:
                 formatted_question = [question.format()
                                       for question in questions]
@@ -249,20 +240,20 @@ def create_app(test_config=None):
                 if qn['id'] not in previousQuestion:
                     available_questions.append(qn)
 
-                if len(available_questions) > 0:
-                    # selected_question = random.choice(available_questions)
-                    selected_question = available_questions[random.randint(
-                        0, len(available_questions) - 1)]
-                    if len(selected_question) == 0:
-                        # abort (404)
-                        print('No question to select')
-                        return jsonify({
-                            'success': True,
-                            'question': None
-                        }), 200
-                    else:
-                        print('selected question : ', selected_question)
-                        print('Len selected qn : ', len(selected_question))
+            if len(available_questions) > 0:
+                selected_question = random.choice(available_questions)
+                # selected_question = available_questions[random.randint(
+                #     0, len(available_questions) - 1)]
+            if len(selected_question) == 0:
+                abort(404)
+                #     print('No question to select')
+                #     return jsonify({
+                #         'success': True,
+                #         'question': None
+                #     }), 200
+                # else:
+                #     print('selected question : ', selected_question)
+                #     print('Len selected qn : ', len(selected_question))
 
                 # if len(selected_question) == 0:
                 #     # abort (404)
@@ -273,14 +264,19 @@ def create_app(test_config=None):
                 #         'question': None
                 #         }), 200
 
-                        return jsonify({
-                            'success': True,
-                            'question': selected_question
-                        })
+            return jsonify({
+                'success': True,
+                'question': selected_question
+                })
 
-        except Exception as e:
-            print('Error when not selected question : ', e)
-            abort(404)
+        # except Exception as e:
+            # print('Error when not selected question : ', e)
+            # abort(404)
+        except BaseException:
+            return jsonify({
+                'success': True,
+                'question': None
+            }), 200
 
     '''
   @TODO:
